@@ -1,7 +1,7 @@
 <?php
 
 
-namespace app\Services;
+namespace App\Services;
 
 
 use Carbon\Carbon;
@@ -23,8 +23,24 @@ class UploadsManager
 
     public function folderInfo($folder)
     {
-        $folder = $this->cleanFolder($folder);
-        // $breadCrumbs = $this->
+         $folder = $this->cleanFolder($folder);
+         $breadCrumbs = $this->breadCrumbs($folder);
+         $slice = array_slice($breadCrumbs, -1);
+         $folderName = current($slice);
+         $breadCrumbs = array_slice($breadCrumbs, 0, -1);
+
+         $subFolders = [];
+         foreach (array_unique($this->disk->directories($folder)) as $subFolder) {
+         	$subFolders["/$subFolder"] = basename($subFolder);
+         }
+
+         $files = [];
+         foreach($this->disk->files($folder) as $path){
+         	$files[] = $this->fileDetails($path);
+         }
+
+         return compact('folder', 'folderName', 'breadCrumbs', 'subFolders', 'files');
+
     }
 
 

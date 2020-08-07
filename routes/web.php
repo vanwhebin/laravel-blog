@@ -14,10 +14,10 @@ Route::get('/admin', function(){
 });
 
 Route::middleware('auth')->namespace('Admin')->group(function(){
-    Route::resource('/admin/index', 'PostController');
-    Route::resource('/admin/post', 'PostController');
-    Route::resource('/admin/tag', 'TagController');
-    Route::resource('/admin/upload', 'UploadController@index');
+    Route::resource('admin/index', 'PostController');
+    Route::resource('admin/post', 'PostController');
+    Route::resource('admin/tag', 'TagController');
+    Route::get('admin/upload', 'UploadController@index');
 });
 
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
