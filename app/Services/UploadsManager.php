@@ -20,26 +20,30 @@ class UploadsManager
         $this->mineDetect = $mineDetect;
     }
 
-
+    /**
+     * 文件夹信息
+     * @param $folder
+     * @return array
+     */
     public function folderInfo($folder)
     {
-         $folder = $this->cleanFolder($folder);
-         $breadCrumbs = $this->breadCrumbs($folder);
-         $slice = array_slice($breadCrumbs, -1);
-         $folderName = current($slice);
-         $breadCrumbs = array_slice($breadCrumbs, 0, -1);
+        $folder = $this->cleanFolder($folder);
+        $breadCrumbs = $this->breadCrumbs($folder);
+        $slice = array_slice($breadCrumbs, -1);
+        $folderName = current($slice);
+        $breadCrumbs = array_slice($breadCrumbs, 0, -1);
 
-         $subFolders = [];
-         foreach (array_unique($this->disk->directories($folder)) as $subFolder) {
-         	$subFolders["/$subFolder"] = basename($subFolder);
-         }
+        $subFolders = [];
+        foreach (array_unique($this->disk->directories($folder)) as $subFolder) {
+            $subFolders["/$subFolder"] = basename($subFolder);
+        }
 
-         $files = [];
-         foreach($this->disk->files($folder) as $path){
-         	$files[] = $this->fileDetails($path);
-         }
+        $files = [];
+        foreach ($this->disk->files($folder) as $path) {
+            $files[] = $this->fileDetails($path);
+        }
 
-         return compact('folder', 'folderName', 'breadCrumbs', 'subFolders', 'files');
+        return compact('folder', 'folderName', 'breadCrumbs', 'subFolders', 'files');
 
     }
 
@@ -51,13 +55,18 @@ class UploadsManager
      */
     protected function cleanFolder($folder)
     {
-        return '/'. trim(str_replace('..', '', $folder), '/');
+        return '/' . trim(str_replace('..', '', $folder), '/');
     }
 
+    /**
+     * 文件夹面包屑
+     * @param $folder
+     * @return array
+     */
     protected function breadCrumbs($folder)
     {
         $folder = trim($folder, '/');
-        $crumbs = ['/' => 'root'];
+        $crumbs = ['/' => 'Root'];
         if (empty($folder)) {
             return $crumbs;
         }
@@ -65,21 +74,27 @@ class UploadsManager
         $folders = explode('/', $folder);
         $build = '';
         foreach ($folders as $folder) {
-            $build .= "/". $folder;
+            $build .= "/" . $folder;
             $crumbs[$build] = $folder;
         }
 
         return $crumbs;
     }
 
+    /**
+     * 文件夹详情
+     * @param $path
+     * @return array
+     */
     public function fileDetails($path)
     {
         $path = "/" . ltrim($path, '/');
         return [
             'name' => basename($path),
             'fullPath' => $path,
+            'mimeType' => $this->fileMimeType($path),
             'webPath' => $this->fileWebpath($path),
-            'size' =>  $this->fileSize($path),
+            'size' => $this->fileSize($path),
             'modified' => $this->fileModified($path)
         ];
     }
@@ -91,7 +106,7 @@ class UploadsManager
      */
     public function fileWebpath($path)
     {
-        $path = rtrim(config('blog.uploads.webpath'), '/'). '/' .ltrim($path, '/');
+        $path = rtrim(config('blog.uploads.webpath'), '/') . '/' . ltrim($path, '/');
         return url($path);
     }
 
@@ -116,6 +131,85 @@ class UploadsManager
         return Carbon::createFromTimeStamp($this->disk->lastModified($path));
     }
 
+
+    /**
+     * 返回文件大小
+     * @param $path
+     * @return int
+     */
+    public function fileSize($path)
+    {
+        return $this->disk->size($path);
+    }
+
+    /**
+     * 创建上传文件的文件夹
+     * @param $folder
+     * @return bool|string
+     */
+    public function createDirectory($folder)
+    {
+        $folder = $this->cleanFolder($folder);
+        if ($this->disk->exists($folder)) {
+            return "文件夹 {$folder} 已存在";
+        }
+
+        return $this->disk->makeDirectory($folder);
+    }
+
+
+    /**
+     * 删除文件夹
+     * @param $folder
+     * @return bool|string
+     */
+    public function deleteDirectory($folder)
+    {
+        $folder = $this->cleanFolder($folder);
+        $fileFolders = array_merge(
+            $this->disk->directories($folder),
+            $this->disk->files($folder)
+        );
+
+        if (!empty($fileFolders)) {
+            return "文件夹不为空";
+        }
+
+        return $this->disk->deleteDirectory($folder);
+    }
+
+    /**
+     * 删除文件
+     * @param $path
+     * @return bool|string
+     */
+    public function deleteFile($path)
+    {
+        $path = $this->cleanFolder($path);
+
+        if (! $this->disk->exists($path)) {
+            return "文件不存在";
+        }
+
+        return $this->disk->delete($path);
+    }
+
+    /**
+     * 保存文件
+     * @param $path
+     * @param $content
+     * @return bool|string
+     */
+    public function saveFile($path, $content)
+    {
+        $path = $this->cleanFolder($path);
+
+        if ($this->disk->exists($path)) {
+            return "文件已经存在";
+        }
+
+        return $this->disk->put($path, $content);
+    }
 
 
 }

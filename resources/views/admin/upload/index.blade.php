@@ -12,7 +12,7 @@
                         @foreach ($breadCrumbs as $path => $disp)
                             <li><a href="/admin/upload?folder={{ $path }}">{{ $disp }}</a></li>
                         @endforeach
-                        <li class="active">{{ $folderName }}</li>
+                        <li class="active">&nbsp;/&nbsp;{{ $folderName }}</li>
                     </ul>
                 </div>
             </div>
@@ -70,7 +70,7 @@
                         <tr>
                             <td>
                                 <a href="{{ $file['webPath'] }}">
-                                    @if (is_image($file['mimeType']))
+                                    @if (isImage($file['mimeType']))
                                         <i class="fa fa-image fa-lg fa-fw"></i>
                                     @else
                                         <i class="fa fa-file fa-lg fa-fw"></i>
@@ -80,13 +80,13 @@
                             </td>
                             <td>{{ $file['mimeType'] ? : 'Unknown' }}</td>
                             <td>{{ $file['modified']->format('j-M-y g:ia') }}</td>
-                            <td>{{ human_filesize($file['size']) }}</td>
+                            <td>{{ humanFilesize($file['size']) }}</td>
                             <td>
                                 <button type="button" class="btn btn-xs btn-danger" onclick="delete_file('{{ $file['name'] }}')">
                                     <i class="fa fa-times-circle fa-lg"></i>
                                     删除
                                 </button>
-                                @if (is_image($file['mimeType']))
+                                @if (isImage($file['mimeType']))
                                     <button type="button" class="btn btn-xs btn-success" onclick="preview_image('{{ $file['webPath'] }}')">
                                         <i class="fa fa-eye fa-lg"></i>
                                         预览
