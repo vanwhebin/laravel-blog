@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Services\Markdown;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -111,6 +112,86 @@ class Post extends Model
             return ;
         }
         $this->tags()->detach();
+    }
+
+	/**
+	 * 返回url
+	 * @param Tag|null $tag
+	 * @return \Illuminate\Contracts\Routing\UrlGenerator|string
+	 */
+
+    public function url(Tag $tag = null)
+    {
+    	$url = url('blog/' . $this->slug);
+
+    	if ($tag) {
+    		$url .= '?tag=' . urlencode($tag->tag);
+	    }
+
+    	return $url;
+
+    }
+
+
+	/**
+	 * 返回所有标签链接
+	 * @param string $base
+	 * @return array
+	 */
+    public function tagLink($base = '/blog?tag=%TAG%')
+    {
+
+    	$tags = $this->tags()->get()->pluck('tag')->all();
+    	$return = [];
+    	foreach ($tags as $tag) {
+    		$url = str_replace('%TAG%', urlencode($tag), $base);
+    		$return[] = '<a href="'. $url  .'">'. e($tag) .'</a>';
+	    }
+
+    	return $return;
+
+    }
+
+	/**
+	 * 返回比当前更新的文章
+	 * @param Tag|null $tag
+	 * @return mixed
+	 */
+    public function newerPost(Tag $tag = null)
+    {
+    	$query = static::where('published_at', '>',  $this->published_at)
+		    ->where('published_at', '<=', Carbon::now())
+		    ->where('is_draft', 0)
+		    ->orderBy('published_at', 'asc');
+    	if ($tag) {
+    		$query->whereHas('tags', function($q) use ($tag){
+    			$q->where('tag', '=', $tag->tag);
+		    });
+	    }
+
+    	return $query->first();
+    }
+
+
+	/**
+	 * 返回之前的文章
+	 * @param Tag|null $tag
+	 * @return mixed
+	 */
+    public function olderPost(Tag $tag = null)
+    {
+    	$query = static::where('published_at', '<', $this->published_at)
+		    ->where('is_draft', 0)
+		    ->orderBy('published_at', 'desc');
+
+    	if ($tag) {
+    		$query = $query->whereHas('tags', function($q) use ($tag) {
+    			$q->where('tag', '=', $tag->tag);
+		    });
+	    }
+
+    	return $query->first();
+
     }
 
 

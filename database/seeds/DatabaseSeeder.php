@@ -5,16 +5,19 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     *
-     * @return void
-     */
-    public function run()
-    {
-        // $this->call(UsersTableSeeder::class);
-        Model::unguard();
-        // $this->call(UsersTableSeeder::class);
-        $this->call(PostTableSeeder::class);
-    }
+	/**
+	 * Seed the application's database.
+	 *
+	 * @return void
+	 */
+	public function run()
+	{
+		// $this->call(UsersTableSeeder::class);
+		Model::unguard();
+		// $this->call(UsersTableSeeder::class);
+		$this->call(TagTableSeeder::class);
+		$this->call(PostTableSeeder::class);
+
+		Model::reguard();
+	}
 }
