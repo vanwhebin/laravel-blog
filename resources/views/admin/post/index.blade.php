@@ -22,6 +22,7 @@
                 <table id="posts-table" class="table table-striped table-bordered">
                     <thead>
                     <tr>
+                        <th>ID</th>
                         <th>发布时间</th>
                         <th>标题</th>
                         <th>副标题</th>
@@ -31,6 +32,7 @@
                     <tbody>
                     @foreach ($posts as $post)
                         <tr>
+                            <td>{{ $post->id }}</td>
                             <td data-order="{{ $post->published_at->timestamp }}">
                                 {{ $post->published_at->format('Y-m-d g:ia') }}
                             </td>

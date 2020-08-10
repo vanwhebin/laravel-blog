@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Services\Markdown;
 use Carbon\Carbon;
+use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -117,7 +118,7 @@ class Post extends Model
 	/**
 	 * 返回url
 	 * @param Tag|null $tag
-	 * @return \Illuminate\Contracts\Routing\UrlGenerator|string
+	 * @return UrlGenerator|string
 	 */
 
     public function url(Tag $tag = null)

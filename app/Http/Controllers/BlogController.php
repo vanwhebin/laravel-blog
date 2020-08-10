@@ -18,10 +18,6 @@ class BlogController extends Controller
         $postService = new PostService($tag);
         $data = $postService->lists();
         $layout = $tag ? Tag::layout($tag): 'blog.layouts.index';
-       // dd($data);
-       //  var_dump(Tag::layout($tag));
-       // dd($layout);
-//        exit;
         return view($layout, $data);
     }
 

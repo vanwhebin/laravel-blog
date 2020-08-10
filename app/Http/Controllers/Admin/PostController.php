@@ -114,6 +114,20 @@ class PostController extends Controller
     }
 
     /**
+     * 删除文章
+     * @param $id
+     * @return RedirectResponse
+     */
+    public function destroy($id)
+    {
+        $post = Post::findOrFail($id);
+        $post->tags()->detach();
+        $post->delete();
+
+        return redirect()->route('post.index')->with('success', '文章已删除');
+    }
+
+    /**
      * 获取模型的值
      * @param $id
      * @param array $fields
@@ -130,19 +144,5 @@ class PostController extends Controller
 
         $fields['tags'] = $post->tags->pluck('tag')->all();
         return $fields;
-    }
-
-    /**
-     * 删除文章
-     * @param $id
-     * @return RedirectResponse
-     */
-    public function destroy($id)
-    {
-        $post = Post::findOrFail($id);
-        $post->tags()->detach();
-        $post->delete();
-
-        return redirect()->route('post.index')->with('success', '文章已删除');
     }
 }

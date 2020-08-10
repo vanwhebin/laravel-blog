@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\TagUpdateRequest;
 use App\Models\Tag;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -39,11 +40,11 @@ class TagController extends Controller
      */
     public function create()
     {
-        $data = [];
+        $tag = [];
         foreach ($this->fields as $field => $default) {
-            $data[$field] = old($field, $default);
+            $tag[$field] = old($field, $default);
         }
-        return view('admin.tag.create', $data);
+        return view('admin.tag.create', $tag);
     }
 
     /**
@@ -68,26 +69,26 @@ class TagController extends Controller
      */
     public function edit($id)
     {
-        $tag = Tag::findOrFail($id);
-        $data = ['id' => $id];
+        $data = Tag::findOrFail($id);
+        $tag = ['id' => $id];
         foreach (array_keys($this->fields) as $field) {
-            $data[$field] = old($field, $tag->field);
+            $tag[$field] = old($field, $data->$field);
         }
-        return view('admin.tag.edit', $data);
+        return view('admin.tag.edit', $tag);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
+     * @param TagUpdateRequest $request
      * @param int $id
-     * @return Response
+     * @return RedirectResponse|Redirector
      */
-    public function update(Request $request, $id)
+    public function update(TagUpdateRequest $request, $id)
     {
         $tag = Tag::findOrFail($id);
-        foreach (array_keys($this->fields) as $field) {
-            $tag->field = $request->get($field);
+        foreach (array_keys(array_except($this->fields, ['tag'])) as $field) {
+            $tag->$field = $request->get($field);
         }
         $tag->save();
         return redirect("admin/tag/$id/edit")->with('success', "修改已保存");

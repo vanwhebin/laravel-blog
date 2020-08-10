@@ -1,8 +1,8 @@
 <?php
 
 Route::get('/', function () {
-    // return redirect('/blog');
-    return view('welcome');
+    return redirect('/blog');
+    // return view('welcome');
 });
 
 

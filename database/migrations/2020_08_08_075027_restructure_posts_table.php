@@ -19,7 +19,7 @@ class RestructurePostsTable extends Migration
             $table->text('content_html')->after('content');
             $table->string('page_image')->default('')->nullable()->after('content_html');
             $table->string('meta_description')->default('')->nullable()->after('page_image');
-            $table->boolean('is_draft')->default(true)->after('meta_description');
+            $table->tinyInteger('is_draft')->default(0)->unsigned()->after('meta_description');
             $table->string('layout')->after('is_draft')->default('blog.layouts.post');
         });
     }
