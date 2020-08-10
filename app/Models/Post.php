@@ -138,7 +138,7 @@ class Post extends Model
 	 * @param string $base
 	 * @return array
 	 */
-    public function tagLink($base = '/blog?tag=%TAG%')
+    public function tagLinks($base = '/blog?tag=%TAG%')
     {
 
     	$tags = $this->tags()->get()->pluck('tag')->all();

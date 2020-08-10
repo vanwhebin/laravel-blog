@@ -5,8 +5,12 @@
  */
 
 require('./bootstrap');
-
-
+// window.Vue = require('vue');
+// Vue.component('welcome-component', require('./components/WelcomeComponent.vue').default);
+//
+// const app = new Vue({
+//     el: '#app'
+// });
 /**
  * Blog Javascript
  * Copied from Clean Blog v1.0.0 (http://startbootstrap.com)

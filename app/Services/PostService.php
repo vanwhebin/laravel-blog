@@ -54,11 +54,11 @@ class PostService
 
     	$posts = Post::where('published_at', '<=', Carbon::now())
 		    ->whereHas('tags',  function($q) use($tag){
-		    	$q->whereHas('tag', '=', $tag->tag);
+		    	$q->where('tag', '=', $tag->tag);
 		    })->where('is_draft', 0)
 		    ->orderBy('published_at', $reverse_direction ?'asc':'desc')
 		    ->simplePaginate(config('blog.per_page'));
-    	$posts->append('tag', $tag->tag);
+    	$posts->tag = $tag->tag;
     	$page_image = $tag->page_image ? : config('blog.page_image');
 
     	return [

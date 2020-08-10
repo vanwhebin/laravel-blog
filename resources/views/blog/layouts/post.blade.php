@@ -4,7 +4,7 @@
 ])
 
 @section('page-header')
-    <header class="masthead" style="background-image: url('{{ page_image($post->page_image) }}')">
+    <header class="masthead" style="background-image: url('{{ pageImage($post->page_image) }}')">
         <div class="overlay"></div>
         <div class="container">
             <div class="row">

@@ -7,8 +7,10 @@ return [
 	'author' => 'Wan Weibin',
 	'page_image' => 'home-bg.jpg',
     'per_page' => 5,
+    'rss_size' => 25,
     'uploads' => [
         'storage' => 'public',
         'webpath' => '/storage',
     ],
+    'contact_email'=> env('MAIL_FROM_ADDRESS'),
 ];

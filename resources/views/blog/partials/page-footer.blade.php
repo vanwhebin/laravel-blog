@@ -6,30 +6,38 @@
                 <ul class="list-inline text-center">
                     <li class="list-inline-item">
                         <a href="#">
-                  <span class="fa-stack fa-lg">
-                    <i class="fas fa-circle fa-stack-2x"></i>
-                    <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-                  </span>
+                          <span class="fa-stack fa-lg">
+                            <i class="fas fa-circle fa-stack-2x"></i>
+                            <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                          </span>
                         </a>
                     </li>
                     <li class="list-inline-item">
                         <a href="#">
-                  <span class="fa-stack fa-lg">
-                    <i class="fas fa-circle fa-stack-2x"></i>
-                    <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
-                  </span>
+                          <span class="fa-stack fa-lg">
+                            <i class="fas fa-circle fa-stack-2x"></i>
+                            <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                          </span>
                         </a>
                     </li>
                     <li class="list-inline-item">
                         <a href="#">
-                  <span class="fa-stack fa-lg">
-                    <i class="fas fa-circle fa-stack-2x"></i>
-                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
-                  </span>
+                          <span class="fa-stack fa-lg">
+                            <i class="fas fa-circle fa-stack-2x"></i>
+                            <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="{{ url('rss') }}" data-toggle="tooltip" title="RSS feed">
+                          <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                          </span>
                         </a>
                     </li>
                 </ul>
-                <p class="copyright text-muted">Copyright © {{ config('blog.author') }} 2018</p>
+                <p class="copyright text-muted">Copyright © {{ config('blog.author') }} {{ date('Y') }}</p>
             </div>
         </div>
     </div>

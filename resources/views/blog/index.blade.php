@@ -6,7 +6,8 @@
 <body>
 <div class="container">
     <h1>{{ config('blog.title') }}</h1>
-    <h5>Page {{ $posts->currentPage() }} of {{ $posts->lastPage() }}</h5>
+{{--    <h5>Page {{ $posts->currentPage() }} of {{ $posts->lastPage() }}</h5>--}}
+    <h5>Page {{ $posts->currentPage() }}</h5>
     <hr>
     <ul>
         @foreach ($posts as $post)

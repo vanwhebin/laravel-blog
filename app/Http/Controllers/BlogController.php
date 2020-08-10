@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\Tag;
 use App\Services\PostService;
+use App\Services\RssFeed;
+use App\Services\SiteMap;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -15,9 +17,10 @@ class BlogController extends Controller
     	$tag = $request->get('tag', null);
         $postService = new PostService($tag);
         $data = $postService->lists();
-        $layout = $tag ? Tag::layout($tag): 'blog.index';
-//        dd($data);
-//        dd($layout);
+        $layout = $tag ? Tag::layout($tag): 'blog.layouts.index';
+       // dd($data);
+       //  var_dump(Tag::layout($tag));
+       // dd($layout);
 //        exit;
         return view($layout, $data);
     }
@@ -32,6 +35,18 @@ class BlogController extends Controller
         }
 
         return view($post->layout, compact('post', 'tag'));
+    }
+
+    public function siteMap(SiteMap $siteMap)
+    {
+        $map = $siteMap->getSiteMap();
+        return response($map)->header('Content-type', 'text/xml');
+    }
+
+    public function rss(RssFeed $feed)
+    {
+        $rss = $feed->getRss();
+        return response($rss)->header('Content-type', 'application/rss+xml');
     }
 
 }
